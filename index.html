@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Power of Starting Early - Compound Interest</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .comparison-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .person-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .person-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .person-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .jason {
+            border-color: #4CAF50;
+        }
+        
+        .jason .person-name {
+            color: #4CAF50;
+        }
+        
+        .chris {
+            border-color: #FF6B6B;
+        }
+        
+        .chris .person-name {
+            color: #FF6B6B;
+        }
+        
+        .stat {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chart-title {
+            color: #333;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .final-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .jason-result {
+            border-color: #4CAF50;
+        }
+        
+        .chris-result {
+            border-color: #FF6B6B;
+        }
+        
+        .final-amount {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .jason-result .final-amount {
+            color: #4CAF50;
+        }
+        
+        .chris-result .final-amount {
+            color: #FF6B6B;
+        }
+        
+        .winner-badge {
+            background: #FFD700;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .key-insight {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .insight-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .insight-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-section,
+            .final-results {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .final-amount {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">The Power of Starting Early</h1>
+        <p class="subtitle">A Tale of Two Investors: Jason vs Chris</p>
+        
+        <div class="comparison-section">
+            <div class="person-card jason">
+                <div class="person-name">👨 JASON</div>
+                <div class="stat">
+                    <div class="stat-label">Started Investing</div>
+                    <div class="stat-value">Age 19</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Stopped Investing</div>
+                    <div class="stat-value">Age 27 (8 years)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Monthly Investment</div>
+                    <div class="stat-value">$300</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total Invested</div>
+                    <div class="stat-value">$28,800</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Annual Return</div>
+                    <div class="stat-value">10%</div>
+                </div>
+            </div>
+            
+            <div class="person-card chris">
+                <div class="person-name">👨 CHRIS</div>
+                <div class="stat">
+                    <div class="stat-label">Started Investing</div>
+                    <div class="stat-value">Age 27</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Stopped Investing</div>
+                    <div class="stat-value">Age 65 (38 years)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Monthly Investment</div>
+                    <div class="stat-value">$300</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total Invested</div>
+                    <div class="stat-value">$140,000</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Annual Return</div>
+                    <div class="stat-value">10%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">Investment Growth Over Time</div>
+            <canvas id="growthChart" width="400" height="200"></canvas>
+        </div>
+        
+        <div class="final-results">
+            <div class="result-card jason-result">
+                <div class="person-name">👨 JASON</div>
+                <div style="opacity: 0.8;">Final Value at Age 65</div>
+                <div class="final-amount">$1,863,287</div>
+                <div>Invested 5x LESS money</div>
+                <div class="winner-badge">🏆 WINNER!</div>
+            </div>
+            
+            <div class="result-card chris-result">
+                <div class="person-name">👨 CHRIS</div>
+                <div style="opacity: 0.8;">Final Value at Age 65</div>
+                <div class="final-amount">$1,589,733</div>
+                <div>Invested 5x MORE money</div>
+                <div style="margin-top: 15px; opacity: 0.7;">Almost $274,000 less!</div>
+            </div>
+        </div>
+        
+        <div class="key-insight">
+            <div class="insight-title">🧠 Key Insight</div>
+            <div class="insight-text">
+                Jason invested <strong>$28,800</strong> over 8 years and ended up with <strong>$273,554 MORE</strong> than Chris, 
+                who invested <strong>$140,000</strong> over 38 years. 
+                <br><br>
+                <strong>Time in the market beats timing the market!</strong>
+                <br>
+                The earlier you start, the more compound interest works in your favor.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Calculate the investment growth data
+        function calculateGrowth() {
+            const jasonData = [];
+            const chrisData = [];
+            const ages = [];
+            
+            // Jason's investment (age 19-27, then stops)
+            let jasonValue = 0;
+            for (let age = 19; age <= 65; age++) {
+                ages.push(age);
+                if (age <= 27) {
+                    jasonValue += 300 * 12; // Monthly investment
+                }
+                jasonValue *= 1.10; // 10% annual growth
+                jasonData.push(Math.round(jasonValue));
+            }
+            
+            // Chris's investment (age 27-65)
+            let chrisValue = 0;
+            for (let age = 19; age <= 65; age++) {
+                if (age >= 27 && age <= 65) {
+                    chrisValue += 300 * 12; // Monthly investment
+                    chrisValue *= 1.10; // 10% annual growth
+                } else if (age > 27) {
+                    chrisValue *= 1.10; // Just growth, no new investment
+                }
+                chrisData.push(Math.round(chrisValue));
+            }
+            
+            return { ages, jasonData, chrisData };
+        }
+        
+        const { ages, jasonData, chrisData } = calculateGrowth();
+        
+        // Create the chart
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ages,
+                datasets: [
+                    {
+                        label: 'Jason (Started Age 19, Stopped Age 27)',
+                        data: jasonData,
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Chris (Started Age 27, Stopped Age 65)',
+                        data: chrisData,
+                        borderColor: '#FF6B6B',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Age',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Investment Value ($)',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + (value / 1000).toFixed(0) + 'K';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
